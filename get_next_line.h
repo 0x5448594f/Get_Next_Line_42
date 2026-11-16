@@ -13,14 +13,12 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-// # define BUFFER_SIZE 10
-
 # include <unistd.h>
 # include <stdlib.h>
 
 char		*get_next_line(int fd);
 
-char		*realocate(char *tmp, size_t len);
+void		realocate(char **tmp, size_t len);
 char		**fill_stash(char *buffer, size_t size);
 int			contains(char *s, char c);
 

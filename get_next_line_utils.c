@@ -16,32 +16,30 @@
 char	**fill_stash(char *buffer, size_t size)
 {
 	static char	*stash;
-	size_t		i;
 
 	if (!buffer)
 		return (NULL);
 	if (!stash)
-		stash = buffer;
-	i = 0;
-	while (i < size && buffer[i])
 	{
-		if (buffer[i] == '\n' || buffer[i] == '\0')
-			break ;
-		i++;
+		stash = malloc((1) * sizeof(char));
+		stash[0] = '\0';
 	}
-	stash = realocate(stash, ft_strlen(stash) + size + 1);
-	ft_strlcpy(stash + ft_strlen(stash), buffer, size + 1);
+	printf("Buffer: %s\n", buffer);
+	printf("Len: %ld\n", ft_strlen(stash));
+	realocate(&stash, ft_strlen(stash) + size + 1);
+	ft_strlcpy(stash + ft_strlen(stash), buffer, size);
+	stash[ft_strlen(stash)] = '\0';
 	return (&stash);
 }
 
-char	*realocate(char *tmp, size_t len)
+void	realocate(char **tmp, size_t len)
 {
 	char	*res;
 
 	res = malloc(len * sizeof(char));
-	ft_strlcpy(res, tmp, ft_strlen(tmp) + 1);
-	free(tmp);
-	return (res);
+	ft_strlcpy(res, *tmp, ft_strlen(*tmp));
+	free(*tmp);
+	*tmp = res;
 }
 
 int	contains(char *s, char c)
@@ -83,7 +81,7 @@ size_t	ft_strlen(const char *s)
 	size_t	len;
 
 	len = 0;
-	while (s[len] && s[len] != '\0')
+	while (s[len] != '\0' && s[len])
 	{
 		len++;
 	}

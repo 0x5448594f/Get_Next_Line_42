@@ -27,6 +27,7 @@ int	main(void)
 	}
 	test = get_next_line(fileno(file));
 	printf("test = %s\n", test);
+	free(test);
 	test = get_next_line(fileno(file));
 	printf("test = %s\n", test);
 	return (0);

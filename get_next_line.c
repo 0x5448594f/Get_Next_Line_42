@@ -27,16 +27,19 @@ char	*get_next_line(int fd)
 	while (size)
 	{
 		stash = fill_stash(buffer, size);
+		printf("Stash: %s\n", *stash);
 		contain_value = contains(*stash, '\n');
 		if (contain_value >= 0)
 		{
-			result = ft_substr(*stash, 0, contain_value);
+			result = ft_substr(*stash, 0, contain_value + 1);
 			*stash += contain_value + 1;
 			break ;
 		}
 		result = ft_strdup(*stash);
+		printf("Result: %s\n", result);
 		size = read(fd, buffer, BUFFER_SIZE);
 	}
+	free(buffer);
 	return (result);
 }
 
@@ -76,18 +79,16 @@ char	*ft_strdup(const char *src)
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
-	size_t	len;
 	size_t	i;
 
-	len = ft_strlen((char *)src);
 	if (size == 0)
-		return (len);
+		return (BUFFER_SIZE);
 	i = 0;
-	while (src[i] && i < size - 1)
+	while (src[i] && i < size)
 	{
 		dest[i] = src[i];
 		i++;
 	}
 	dest[i] = '\0';
-	return (len);
+	return (BUFFER_SIZE);
 }
