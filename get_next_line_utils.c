@@ -11,35 +11,39 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	**fill_stash(char *buffer, size_t size)
 {
 	static char	*stash;
+	size_t		len;
 
 	if (!buffer)
+	{
+		free(buffer);
 		return (NULL);
+	}
 	if (!stash)
 	{
 		stash = malloc((1) * sizeof(char));
 		stash[0] = '\0';
 	}
-	printf("Buffer: %s\n", buffer);
-	printf("Len: %ld\n", ft_strlen(stash));
-	realocate(&stash, ft_strlen(stash) + size + 1);
-	ft_strlcpy(stash + ft_strlen(stash), buffer, size);
-	stash[ft_strlen(stash)] = '\0';
+	len = ft_strlen(stash);
+	stash = realocate(stash, len + size + 1);
+	ft_strlcpy(stash + len, buffer, size);
+	stash[len + size] = '\0';
 	return (&stash);
 }
 
-void	realocate(char **tmp, size_t len)
+char	*realocate(char *tmp, size_t len)
 {
 	char	*res;
 
 	res = malloc(len * sizeof(char));
+	if (!res)
+		return ;
 	ft_strlcpy(res, *tmp, ft_strlen(*tmp));
 	free(*tmp);
-	*tmp = res;
+	res;
 }
 
 int	contains(char *s, char c)

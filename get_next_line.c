@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
@@ -27,7 +26,12 @@ char	*get_next_line(int fd)
 	while (size)
 	{
 		stash = fill_stash(buffer, size);
-		printf("Stash: %s\n", *stash);
+		if (!stash)
+		{
+			free(stash);
+			free(buffer);
+			return (NULL);
+		}
 		contain_value = contains(*stash, '\n');
 		if (contain_value >= 0)
 		{
@@ -36,7 +40,6 @@ char	*get_next_line(int fd)
 			break ;
 		}
 		result = ft_strdup(*stash);
-		printf("Result: %s\n", result);
 		size = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
