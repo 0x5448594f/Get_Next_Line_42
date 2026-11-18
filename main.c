@@ -3,32 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tderive </var/spool/mail/tderive>          +#+  +:+       +#+        */
+/*   By: thyo <derive.theo@proton.me>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/11/14 08:50:03 by tderive           #+#    #+#             */
-/*   Updated: 2026/11/14 09:21:50 by tderive          ###   ########.fr       */
+/*   Created: 2026/11/18 18:39:03 by thyo              #+#    #+#             */
+/*   Updated: 2026/11/18 18:47:13 by thyo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 int	main(void)
 {
-	FILE	*file;
-	char	*test;
-
-	file = fopen("text.txt", "r");
-	if (file == NULL)
+	FILE	*file = fopen("text.txt", "r");
+	if (!file)
 	{
-		printf("Failed");
+		printf("No file.");
 		return (-1);
 	}
+
+	char *test;
 	test = get_next_line(fileno(file));
-	printf("test = %s\n", test);
-	free(test);
-	test = get_next_line(fileno(file));
-	printf("test = %s\n", test);
+	printf("%s\n", test);
 	return (0);
 }

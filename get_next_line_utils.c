@@ -1,62 +1,59 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tderive </var/spool/mail/tderive>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/11/13 09:06:38 by tderive           #+#    #+#             */
-/*   Updated: 2026/11/14 09:25:57 by tderive          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-char	**fill_stash(char *buffer, size_t size)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	static char	*stash;
-	size_t		len;
+	size_t	i;
+	size_t	len1;
+	size_t	len2;
+	char	*string;
 
-	if (!buffer)
-	{
-		free(buffer);
+	len1 = ft_strlen((char *)s1);
+	len2 = ft_strlen((char *)s2);
+	string = malloc((len1 + len2 + 1) * sizeof(char));
+	if (!string)
 		return (NULL);
-	}
-	if (!stash)
+	i = -1;
+	while (++i < len1)
+		string[i] = s1[i];
+	i = -1;
+	while (++i < len2)
+		string[i + len1] = s2[i];
+	string[len1 + len2] = '\0';
+	return (string);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	if (!s)
+		return (0);
+	while (s[len] != '\0')
 	{
-		stash = malloc((1) * sizeof(char));
-		stash[0] = '\0';
+		len++;
 	}
-	len = ft_strlen(stash);
-	stash = realocate(stash, len + size + 1);
-	ft_strlcpy(stash + len, buffer, size);
-	stash[len + size] = '\0';
-	return (&stash);
+	return (len);
 }
 
-char	*realocate(char *tmp, size_t len)
+char	*ft_strdup(const char *src)
 {
-	char	*res;
+	size_t	len;
+	size_t	i;
+	char	*result;
 
-	res = malloc(len * sizeof(char));
-	if (!res)
-		return ;
-	ft_strlcpy(res, *tmp, ft_strlen(*tmp));
-	free(*tmp);
-	res;
-}
-
-int	contains(char *s, char c)
-{
-	int	i;
-
+	len = ft_strlen(src);
+	result = malloc((len + 1) * sizeof(char));
+	if (!result)
+		return (NULL);
 	i = 0;
-	while (s[i] != '\0')
+	while (src[i] && i < len)
 	{
-		if (s[i] == c) return (i);
+		result[i] = src[i];
 		i++;
 	}
-	return (-1);
+	result[i] = '\0';
+	return (result);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
@@ -78,16 +75,4 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		result[index] = s[index + start];
 	result[len] = '\0';
 	return (result);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (s[len] != '\0' && s[len])
-	{
-		len++;
-	}
-	return (len);
 }

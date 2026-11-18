@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tderive </var/spool/mail/tderive>          +#+  +:+       +#+        */
+/*   By: thyo <derive.theo@proton.me>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/11/13 08:56:08 by tderive           #+#    #+#             */
-/*   Updated: 2026/11/14 09:26:14 by tderive          ###   ########.fr       */
+/*   Created: 2026/11/18 18:42:06 by thyo              #+#    #+#             */
+/*   Updated: 2026/11/18 18:49:18 by thyo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,84 +14,44 @@
 
 char	*get_next_line(int fd)
 {
-	char		**stash;
-	char		*result;
-	char		*buffer;
-	int			contain_value;
-	int			size;
+	static char	*stash;
+	char	buffer[BUFFER_SIZE + 1];
+	char	*tmp;
+	char	*result;
+	int	size;
+	int	contain_val;
 
-	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	size = read(fd, buffer, BUFFER_SIZE);
 	buffer[size] = '\0';
-	while (size)
+	result = NULL;
+	while (size > 0)
 	{
-		stash = fill_stash(buffer, size);
-		if (!stash)
+		stash = ft_strjoin(stash, buffer);
+		contain_val = contains(stash, '\n');
+		if (contain_val > 0)
 		{
+			result = ft_substr(stash, 0, contain_val);
+			tmp = ft_strdup(stash + contain_val + 1);
 			free(stash);
-			free(buffer);
-			return (NULL);
+			stash = tmp;
 		}
-		contain_value = contains(*stash, '\n');
-		if (contain_value >= 0)
-		{
-			result = ft_substr(*stash, 0, contain_value + 1);
-			*stash += contain_value + 1;
-			break ;
-		}
-		result = ft_strdup(*stash);
 		size = read(fd, buffer, BUFFER_SIZE);
+		if (size > 0)
+			buffer[size] = '\0';
 	}
-	free(buffer);
 	return (result);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	contains(char *s, char first_c)
 {
-	size_t			i;
-	unsigned char	val;
-	unsigned char	*p;
+	size_t	i;	
 
-	if (!s)
-		return (NULL);
-	i = -1;
-	val = (unsigned char)c;
-	p = (unsigned char *)s;
-	while (p[++i] != '\0')
-	{
-		if (p[i] == val)
-			return ((char *)(p) + i);
-	}
-	if (p[i] == val)
-		return ((char *)p + i);
-	return (NULL);
-}
-
-char	*ft_strdup(const char *src)
-{
-	size_t	len;
-	char	*result;
-
-	len = ft_strlen(src);
-	result = malloc((len + 1) * sizeof(char));
-	if (!result)
-		return (NULL);
-	ft_strlcpy(result, src, len + 1);
-	return (result);
-}
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t	i;
-
-	if (size == 0)
-		return (BUFFER_SIZE);
 	i = 0;
-	while (src[i] && i < size)
+	while (i < ft_strlen(s))
 	{
-		dest[i] = src[i];
+		if (s[i] == first_c)
+			return (i);
 		i++;
 	}
-	dest[i] = '\0';
-	return (BUFFER_SIZE);
+	return (-1);
 }
