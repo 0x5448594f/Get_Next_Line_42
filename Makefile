@@ -17,7 +17,7 @@ SRC =		get_next_line.c\
 FLAG=		-Wall -Wextra -Werror
 
 all: 
-	$(CC) $(FLAG) -g3 -D BUFFER_SIZE=1 $(SRC) -o $(NAME)
+	$(CC) $(FLAG) -g3 -D BUFFER_SIZE=42 $(SRC) -o $(NAME)
 
 clean:
 	rm -f a.out

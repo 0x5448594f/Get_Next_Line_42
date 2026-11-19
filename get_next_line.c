@@ -11,47 +11,109 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
 	static char	*stash;
-	char	buffer[BUFFER_SIZE + 1];
-	char	*tmp;
 	char	*result;
-	int	size;
-	int	contain_val;
 
-	size = read(fd, buffer, BUFFER_SIZE);
-	buffer[size] = '\0';
-	result = NULL;
-	while (size > 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	stash = read_line(stash, fd);
+	if (!stash)
 	{
-		stash = ft_strjoin(stash, buffer);
-		contain_val = contains(stash, '\n');
-		if (contain_val > 0)
-		{
-			result = ft_substr(stash, 0, contain_val);
-			tmp = ft_strdup(stash + contain_val + 1);
-			free(stash);
-			stash = tmp;
-		}
-		size = read(fd, buffer, BUFFER_SIZE);
-		if (size > 0)
-			buffer[size] = '\0';
+		free(stash);
+		return (NULL);
 	}
+	result = get_line(stash);
+	if (!result)
+	{
+		free(stash);
+		return (NULL);
+	}
+	stash = resize_stash(stash);
 	return (result);
 }
 
-int	contains(char *s, char first_c)
+char	*read_line(char *s, int fd)
 {
-	size_t	i;	
-
-	i = 0;
-	while (i < ft_strlen(s))
+	char		*buff;
+	char		*tmp;
+	ssize_t	size;
+	
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buff)
+		return (NULL);
+	size = read(fd, buff, BUFFER_SIZE);
+	while (size > 0)
 	{
-		if (s[i] == first_c)
-			return (i);
+		buff[size] = '\0';
+		tmp = ft_strjoin(s, buff);
+		free(s);
+		if(!tmp)
+			return (NULL);
+		s = tmp;
+		if (contains(buff, '\n'))
+			break ;
+		size = read(fd, buff, BUFFER_SIZE);
+	}
+	free(buff);
+	return (s);
+}
+
+char	*get_line(char *s)
+{
+	char	*result;
+	int	i;
+	int	len;
+
+	if (!s[0])
+		return (NULL);
+	i = 0;
+	while (s[i] && s[i] != '\n')
+		i++;
+	if (s[i] == '\n')
+		i++;
+	len = i;
+	result = malloc((len + 1) * sizeof(char));
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (s[i] && i < len)
+	{
+		result[i] = s[i];
 		i++;
 	}
-	return (-1);
+	result[len] = '\0';
+	return (result);
+}
+
+char	*resize_stash(char *s)
+{
+	char	*new_stash;
+	int	i;
+	int	j;
+
+	i = 0;
+	if (!s[0] || !s)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0' && s[i] != '\n')
+		i++;
+	if (s[i])
+		i++;
+	new_stash = malloc((ft_strlen(s) - i + 1) * sizeof(char));
+	if (!new_stash)
+		return (NULL);
+	j = 0;
+	while (s[i] != '\0' && i < (int)ft_strlen(s))
+	{
+		new_stash[j] = s[i];
+		i++;
+		j++;
+	}
+	new_stash[j] = '\0';
+	free(s);
+	return (new_stash);
 }

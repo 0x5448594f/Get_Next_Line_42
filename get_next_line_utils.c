@@ -56,23 +56,16 @@ char	*ft_strdup(const char *src)
 	return (result);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+int	contains(char *s, char c)
 {
-	size_t	index;
-	char	*result;
+	int	i;
 
-	if (!s)
-		return (NULL);
-	if (start > ft_strlen(s))
-		return (ft_strdup(""));
-	if (len > ft_strlen(s + start))
-		len = ft_strlen(s + start);
-	result = malloc((len + 1) * sizeof(char));
-	if (!result)
-		return (NULL);
-	index = -1;
-	while (++index < len)
-		result[index] = s[index + start];
-	result[len] = '\0';
-	return (result);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (s[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
 }

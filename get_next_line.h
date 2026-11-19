@@ -16,9 +16,12 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-int			contains(char *s, char c);
 char		*get_next_line(int fd);
+char		*read_line(char *s, int fd);
+char		*get_line(char *s);
+char		*resize_stash(char *s);
 
+int		contains(char *s, char c);
 size_t		ft_strlen(const char *s);
 char		*ft_strdup(const char *src);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
